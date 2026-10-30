@@ -1,0 +1,115 @@
+{
+  "users": [
+    {
+      "id": "USR_1793338703163",
+      "fullName": "MD ATIQUL ISLAM",
+      "email": "atiq.dhk.bd@gmail.com",
+      "phoneNumber": "+8801689333000",
+      "password": "$2b$10$uDZEJgzmN5f880RThXJGPeqC7X43JbpFbPtKgKXNwa51euh8XRHCe",
+      "points": 10,
+      "role": "superadmin"
+    },
+    {
+      "id": "USR_1793343289729",
+      "fullName": "SAMIA PARVIN",
+      "email": "samia.parvin.shanta@gmail.com",
+      "phoneNumber": "+8801886445346",
+      "password": "$2b$10$1cizpJ.yt4uDrqu2HZySVOIGA8Sf/lLauscGMSaL6ssos7KmQne5e",
+      "points": 10,
+      "role": "user",
+      "status": "active",
+      "createdAt": "30/10/2026"
+    }
+  ],
+  "resetCodes": {
+    "atiq.dhk.bd@gmail.com": {
+      "code": "647134",
+      "expires": 1793339944932
+    }
+  },
+  "posts": [],
+  "marketplace": [
+    {
+      "id": "ITEM_1",
+      "title": "চিটাগাং সেগুন কাঠের সোফা সেট (৩+১+১)",
+      "category": "furniture",
+      "price": "৳ ২৫,০০০",
+      "location": "গুলশান ২, ঢাকা",
+      "sellerName": "মোহাম্মদ আতিকুল",
+      "sellerPhone": "+8801689333000",
+      "image": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&auto=format&fit=crop&q=60"
+    },
+    {
+      "id": "ITEM_2",
+      "title": "সুজুকি জিক্সার এসএফ ২০১৮ (Suzuki Gixxer SF)",
+      "category": "vehicle",
+      "price": "৳ ১,৬৫,০০০",
+      "location": "উত্তর বাড্ডা, ঢাকা",
+      "sellerName": "আরিফ আহমেদ",
+      "sellerPhone": "+8801711223344",
+      "image": "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=500&auto=format&fit=crop&q=60"
+    }
+  ],
+  "hisab": [],
+  "donors": [
+    {
+      "id": "DONOR_1793341146311",
+      "name": "MD ATIQUL ISLAM",
+      "phone": "+8801689333000",
+      "bloodGroup": "B+",
+      "area": "North Badda, Dhaka",
+      "lastDonation": "Available Now"
+    }
+  ],
+  "bills": [
+    {
+      "id": "BILL_1",
+      "userPhone": "+8801689333000",
+      "title": "ডেসকো বিদ্যুৎ বিল (DESCO)",
+      "category": "electricity",
+      "amount": 1850,
+      "dueDate": "2026-11-05",
+      "status": "unpaid"
+    },
+    {
+      "id": "BILL_2",
+      "userPhone": "+8801689333000",
+      "title": "ব্রডব্যান্ড ইন্টারনেট (Amber IT)",
+      "category": "internet",
+      "amount": 1050,
+      "dueDate": "2026-11-08",
+      "status": "unpaid"
+    },
+    {
+      "id": "BILL_1793343305516_1",
+      "userPhone": "+8801886445346",
+      "title": "ডেসকো বিদ্যুৎ বিল (Electricity)",
+      "category": "electricity",
+      "amount": 1850,
+      "dueDate": "2026-11-05",
+      "status": "unpaid"
+    },
+    {
+      "id": "BILL_1793343305516_2",
+      "userPhone": "+8801886445346",
+      "title": "ওয়াই-ফাই ইন্টারনেট বিল (Amber IT)",
+      "category": "internet",
+      "amount": 1050,
+      "dueDate": "2026-11-08",
+      "status": "unpaid"
+    },
+    {
+      "id": "BILL_1793343305516_3",
+      "userPhone": "+8801886445346",
+      "title": "বাসা গ্যাস ও পানি ইউটিলিটি",
+      "category": "gas",
+      "amount": 1080,
+      "dueDate": "2026-11-12",
+      "status": "unpaid"
+    }
+  ],
+  "tasks": [],
+  "buses": [],
+  "trains": [],
+  "bazar": []
+}

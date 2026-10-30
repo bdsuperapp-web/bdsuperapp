@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super App Development Roadmap</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --primary: #3b82f6;
+            --accent: #10b981;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 700px;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            color: #60a5fa;
+        }
+
+        .progress-box {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            margin-bottom: 40px;
+        }
+
+        .progress-bar-bg {
+            background: #334155;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 40%;
+            background: linear-gradient(90deg, #3b82f6, #10b981);
+            transition: width 0.4s ease;
+        }
+
+        .timeline-container {
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background: #334155;
+            top: 20px;
+            bottom: 20px;
+            left: 30px;
+            margin-left: -2px;
+        }
+
+        .step-card {
+            position: relative;
+            background: var(--card-bg);
+            margin-left: 70px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #334155;
+            transition: transform 0.2s, border-color 0.2s;
+            cursor: pointer;
+        }
+
+        .step-card:hover {
+            transform: translateX(8px);
+            border-color: var(--primary);
+        }
+
+        .step-badge {
+            position: absolute;
+            left: -58px;
+            top: 18px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 3px solid var(--primary);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            z-index: 1;
+        }
+
+        .step-card.active .step-badge {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.6);
+        }
+
+        .step-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0 0 8px 0;
+            color: #e2e8f0;
+        }
+
+        .step-desc {
+            color: var(--text-sub);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .tags {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: #334155;
+            color: #cbd5e1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Super App Development Roadmap</h1>
+        <p style="color: var(--text-sub);">ধাপ ১ থেকে ৫: আর্কিটেকচার থেকে লাইভ রোল-আউট ট্র্যাকার</p>
+    </div>
+
+    <div class="progress-box">
+        <div style="display: flex; justify-content: space-between; font-weight: bold;">
+            <span>ওভারঅল কমপ্লিশন স্ট্যাটাস</span>
+            <span id="progress-percent">40%</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-bar"></div>
+        </div>
+    </div>
+
+    <div class="timeline-container">
+        
+        <!-- Step 1 -->
+        <div class="step-card active" onclick="updateProgress(20)">
+            <div class="step-badge">১</div>
+            <h3 class="step-title">ধাপ ১: কোর ফিচার ও MVP প্ল্যানিং</h3>
+            <p class="step-desc">অপরিহার্য ফিচার নির্ধারণ: ফোন নম্বর অথেন্টিকেশন, লোকাল সার্ভিস ডিরেক্টরি এবং মাইক্রো-কমিউনিটি ফিড। অপ্রয়োজনীয় জটিলতা বাদ দিয়ে কোর ভ্যালু লক করা।</p>
+            <div class="tags">
+                <span class="tag">MVP Scope</span>
+                <span class="tag">Feature Lock</span>
+                <span class="tag">Target Audience</span>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card active" onclick="updateProgress(40)">
+            <div class="step-badge">২</div>
+            <h3 class="step-title">ধাপ ২: ইউজার রেজিস্ট্রেশন ও সিকিউরিটি আর্কিটেকচার</h3>
+            <p class="step-desc">মোবাইল নম্বর ও পাসওয়ার্ড সিস্টেম ডিজাইন। Bcrypt দিয়ে পাসওয়ার্ড হ্যাশিং, JWT টোকেন সেশন এবং রেট-লিমিটিং কনফিগারেশন।</p>
+            <div class="tags">
+                <span class="tag">JWT Auth</span>
+                <span class="tag">Bcrypt Hash</span>
+                <span class="tag">PostgreSQL Schema</span>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card" onclick="updateProgress(60)">
+            <div class="step-badge">৩</div>
+            <h3 class="step-title">ধাপ ৩: টেকনোলজি স্ট্যাক ও ইনফ্রাস্ট্রাকচার সেটআপ</h3>
+            <p class="step-desc">ব্যাকএন্ডে Node.js (Express), ডাটাবেজে PostgreSQL ও Redis ক্যাশিং এবং ফ্রন্টএন্ডে Flutter ফ্রেমওয়ার্ক কানেক্ট করা।</p>
+            <div class="tags">
+                <span class="tag">Flutter</span>
+                <span class="tag">Node.js / Express</span>
+                <span class="tag">PostgreSQL</span>
+            </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-card" onclick="updateProgress(80)">
+            <div class="step-badge">৪</div>
+            <h3 class="step-title">ধাপ ৪: ডাটাবেজ মডেলিং ও ব্যাকএন্ড API ডেভলপমেন্ট</h3>
+            <p class="step-desc">ইউজার টেবিল, ফিড এবং ডিরেক্টরি টেবিল তৈরি। সিকিউর এন্ডপয়েন্ট (`/api/register`, `/api/login`) বিল্ড ও টেস্টিং।</p>
+            <div class="tags">
+                <span class="tag">REST API</span>
+                <span class="tag">DB Migrations</span>
+                <span class="tag">Postman Testing</span>
+            </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="step-card" onclick="updateProgress(100)">
+            <div class="step-badge">৫</div>
+            <h3 class="step-title">ধাপ ৫: ফ্রন্টএন্ড ইন্টিগ্রেশন ও ক্লোজড বেটা রোল-আউট</h3>
+            <p class="step-desc">ফ্লাটার UI-এর সাথে ব্যাকএন্ড যুক্ত করা, টোকেন লোকাল স্টোরেজে সংরক্ষণ এবং প্রান্তিক ব্যবহারকারীদের নিয়ে ফিল্ড টেস্টিং।</p>
+            <div class="tags">
+                <span class="tag">Flutter Integration</span>
+                <span class="tag">Beta Testing</span>
+                <span class="tag">Performance Tuning</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function updateProgress(value) {
+            document.getElementById('progress-bar').style.width = value + '%';
+            document.getElementById('progress-percent').innerText = value + '%';
+        }
+    </script>
+</body>
+</html>

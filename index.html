@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BD Super Web Portal - Live Services</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        body { background-color: #0f172a; color: #ffffff; padding: 24px; padding-bottom: 95px; }
+
+        /* Clean Public Header */
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
+            padding: 18px 26px; 
+            border-radius: 14px; 
+            border: 1px solid #38bdf8; 
+            margin-bottom: 22px; 
+            box-shadow: 0 8px 25px rgba(2, 132, 199, 0.2);
+        }
+        .portal-brand h1 { 
+            font-size: 1.6rem; 
+            color: #38bdf8; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            letter-spacing: 0.5px;
+        }
+        .portal-brand p { 
+            font-size: 0.88rem; 
+            color: #94a3b8; 
+            margin-top: 4px; 
+        }
+
+        .public-badge { 
+            background: rgba(56, 189, 248, 0.15); 
+            border: 1px solid #38bdf8; 
+            color: #38bdf8; 
+            padding: 8px 16px; 
+            border-radius: 20px; 
+            font-weight: bold; 
+            font-size: 0.9rem; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+        }
+
+        /* Weather Banner */
+        .weather-banner { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid #38bdf8; border-radius: 12px; padding: 16px 22px; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
+        .weather-main { display: flex; align-items: center; gap: 16px; }
+        .weather-icon-big { font-size: 2.5rem; }
+        .weather-temp { font-size: 1.6rem; font-weight: bold; color: #38bdf8; }
+        .weather-condition { font-size: 0.88rem; color: #cbd5e1; }
+        .weather-extra { display: flex; gap: 18px; flex-wrap: wrap; }
+        .weather-item { font-size: 0.82rem; color: #94a3b8; }
+        .aqi-pill { background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #f87171; padding: 3px 8px; border-radius: 6px; font-size: 0.78rem; font-weight: bold; }
+
+        /* Search with Active Voice */
+        .search-container { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 16px 20px; margin-bottom: 22px; display: flex; align-items: center; gap: 12px; }
+        .search-input { flex: 1; background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 12px 18px; color: #ffffff; font-size: 1rem; outline: none; }
+        .voice-btn { background: #0284c7; border: none; color: white; padding: 12px 18px; border-radius: 8px; cursor: pointer; font-size: 0.95rem; font-weight: bold; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .voice-btn.recording { background: #ef4444; animation: pulse 1s infinite alternate; }
+        @keyframes pulse { from { box-shadow: 0 0 5px #ef4444; } to { box-shadow: 0 0 18px #ef4444; } }
+
+        .section-title { font-size: 1.25rem; margin-bottom: 16px; color: #f1f5f9; }
+        .grid-services { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 24px; }
+        .service-card { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.2s ease; }
+        .service-card:hover { transform: translateY(-4px); border-color: #38bdf8; background: #243247; }
+        .service-icon { font-size: 1.8rem; margin-bottom: 8px; }
+        .service-name { font-weight: bold; font-size: 0.9rem; color: #e2e8f0; }
+        .service-desc { font-size: 0.72rem; color: #94a3b8; margin-top: 4px; }
+
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 12px; }
+        .app-input { width: 100%; padding: 10px 14px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #ffffff; font-size: 0.9rem; outline: none; }
+        .hisab-btn { background: #0284c7; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+
+        /* 1. FULL BLOOD DONOR PANEL */
+        .blood-network-container { background: #1e293b; border: 2px solid #ef4444; border-radius: 12px; padding: 22px; margin-bottom: 25px; }
+        .b-tab-btn { padding: 8px 18px; background: #0f172a; color: #cbd5e1; border: 1px solid #334155; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .b-tab-btn.active { background: #ef4444; color: white; border-color: #ef4444; }
+        .blood-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+        .donor-card { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; position: relative; }
+        .group-badge { position: absolute; top: 14px; right: 14px; background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #f87171; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 1.05rem; }
+        .blood-call-btn { display: block; margin-top: 12px; background: #ef4444; color: white; text-align: center; text-decoration: none; padding: 9px; border-radius: 6px; font-weight: bold; font-size: 0.9rem; }
+
+        /* 2. FULL TRANSPORT PANEL */
+        .transport-container { background: #1e293b; border: 2px solid #6366f1; border-radius: 12px; padding: 22px; margin-bottom: 25px; }
+        .t-tab-btn { padding: 8px 18px; background: #0f172a; color: #cbd5e1; border: 1px solid #334155; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .t-tab-btn.active { background: #6366f1; color: white; border-color: #6366f1; }
+        .route-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .route-card { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; position: relative; }
+        .route-type-badge { position: absolute; top: 14px; right: 14px; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; background: rgba(99, 102, 241, 0.2); color: #818cf8; border: 1px solid #6366f1; }
+        .ticket-portal-btn { display: inline-block; margin-top: 12px; background: #10b981; color: white; text-align: center; text-decoration: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; font-size: 0.85rem; }
+
+        /* Marketplace Panel */
+        .marketplace-container { background: #1e293b; border: 2px solid #38bdf8; border-radius: 12px; padding: 22px; margin-bottom: 25px; }
+        .m-tab-btn { padding: 8px 16px; background: #0f172a; color: #cbd5e1; border: 1px solid #334155; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .m-tab-btn.active { background: #38bdf8; color: #0b1329; border-color: #38bdf8; }
+        .items-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+        .item-card { background: #0f172a; border: 1px solid #334155; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
+        .item-img { width: 100%; height: 160px; object-fit: cover; }
+        .item-body { padding: 14px; display: flex; flex-direction: column; flex: 1; }
+        .item-price { color: #38bdf8; font-weight: bold; font-size: 1.2rem; margin-bottom: 4px; }
+        .item-title { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; color: #f1f5f9; }
+        .call-btn { background: #10b981; color: white; text-decoration: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; font-size: 0.85rem; text-align: center; }
+
+        /* Bazar, Bills, Quiz, Hisab */
+        .bazar-container { background: #1e293b; border: 2px solid #f59e0b; border-radius: 12px; padding: 22px; margin-bottom: 25px; }
+        .bazar-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+        .bazar-card { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 16px; }
+
+        .bill-container { background: #1e293b; border: 2px solid #06b6d4; border-radius: 12px; padding: 22px; margin-bottom: 25px; }
+        .bill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+        .bill-card { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; }
+
+        .quiz-container { background: #1e293b; border: 2px solid #f59e0b; border-radius: 12px; padding: 22px; margin-bottom: 25px; }
+        .quiz-card { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; margin-bottom: 16px; }
+        .quiz-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+        .quiz-opt-btn { background: #1e293b; border: 1px solid #334155; color: #cbd5e1; padding: 10px 14px; border-radius: 6px; cursor: pointer; text-align: left; }
+
+        .hisab-container { background: #1e293b; border: 2px solid #0284c7; border-radius: 12px; padding: 22px; margin-bottom: 25px; }
+        .task-container { background: #1e293b; border: 2px solid #8b5cf6; border-radius: 12px; padding: 22px; margin-bottom: 25px; }
+        .prayer-container { background: #1e293b; border: 2px solid #10b981; border-radius: 12px; padding: 22px; margin-bottom: 25px; }
+
+        /* Floating Emergency */
+        .emergency-floating-btn { position: fixed; bottom: 25px; right: 25px; background: #ef4444; color: white; border: none; border-radius: 50px; padding: 14px 22px; font-size: 1rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 20px rgba(239, 68, 68, 0.6); z-index: 1000; }
+        .emergency-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: none; justify-content: center; align-items: center; z-index: 1001; }
+        .emergency-modal { background: #1e293b; border: 2px solid #ef4444; border-radius: 12px; width: 90%; max-width: 480px; padding: 24px; }
+    </style>
+</head>
+<body>
+
+    <!-- Header (No Login/Logout/User restriction) -->
+    <div class="header">
+        <div class="portal-brand">
+            <h1>🌐 Welcome to BD Super Web Portal</h1>
+            <p>সকল ডিজিটাল সিটিজেন সার্ভিস এখন সবার জন্য উন্মুক্ত ও বাধাহীন</p>
+        </div>
+        <div class="public-badge">
+            <span>🟢 All Services Live & Free</span>
+        </div>
+    </div>
+
+    <!-- Live Weather -->
+    <div class="weather-banner" id="weatherBox">
+        <div class="weather-main">
+            <div class="weather-icon-big" id="wIcon">⛅</div>
+            <div>
+                <div class="weather-temp" id="wTemp">২৮° সে.</div>
+                <div class="weather-condition" id="wCondition">আংশিক মেঘলা • ঢাকা</div>
+            </div>
+        </div>
+        <div class="weather-extra">
+            <div class="weather-item">🌧️ বৃষ্টির সম্ভাবনা: <strong id="wRain">১৫%</strong></div>
+            <div class="weather-item">💧 আর্দ্রতা: <strong id="wHumid">৬৫%</strong></div>
+            <div class="weather-item">🌬️ AQI: <strong id="wAqi">১৫২</strong> <span class="aqi-pill" id="wAqiStatus">অস্বাস্থ্যকর</span></div>
+        </div>
+    </div>
+
+    <!-- Active Bangla Voice Search -->
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="মুখে বলুন বা লিখুন (যেমন: রক্তদাতা, বাস রুট, মার্কেটপ্লেস, বাজার দর, বিল)..." onkeyup="handleManualSearch()">
+        <button id="voiceBtn" class="voice-btn" onclick="toggleVoiceRecognition()">
+            <span id="voiceIcon">🎤</span> <span id="voiceText">মুখে বলুন</span>
+        </button>
+    </div>
+
+    <!-- Daily Services -->
+    <h3 class="section-title">Daily Essential Services</h3>
+    <div class="grid-services">
+        <div class="service-card" onclick="document.getElementById('bloodNetworkBox').scrollIntoView({ behavior: 'smooth' })">
+            <div class="service-icon">🩸</div>
+            <div class="service-name">রক্তদাতা নেটওয়ার্ক</div>
+            <div class="service-desc">রক্ত খুঁজুন ও দিন</div>
+        </div>
+        <div class="service-card" onclick="document.getElementById('transportBox').scrollIntoView({ behavior: 'smooth' })">
+            <div class="service-icon">🚌</div>
+            <div class="service-name">বাস ও ট্রেন রুট</div>
+            <div class="service-desc">রুট ও সময়সূচি</div>
+        </div>
+        <div class="service-card" onclick="document.getElementById('marketPlaceBox').scrollIntoView({ behavior: 'smooth' })">
+            <div class="service-icon">🛍️</div>
+            <div class="service-name">Marketplace</div>
+            <div class="service-desc">Buy, Sell & Rent</div>
+        </div>
+        <div class="service-card" onclick="document.getElementById('bazarBox').scrollIntoView({ behavior: 'smooth' })">
+            <div class="service-icon">🛒</div>
+            <div class="service-name">কাঁচা বাজার দর</div>
+            <div class="service-desc">লাইভ দাম ও ট্রেন্ড</div>
+        </div>
+        <div class="service-card" onclick="document.getElementById('billAlertBox').scrollIntoView({ behavior: 'smooth' })">
+            <div class="service-icon">💡</div>
+            <div class="service-name">বিল রিমাইন্ডার</div>
+            <div class="service-desc">ইউটিলিটি ও ট্র্যাকিং</div>
+        </div>
+        <div class="service-card" onclick="document.getElementById('quizBox').scrollIntoView({ behavior: 'smooth' })">
+            <div class="service-icon">🏆</div>
+            <div class="service-name">দৈনিক কুইজ</div>
+            <div class="service-desc">ইউনিক প্রশ্ন ও রিওয়ার্ড</div>
+        </div>
+        <div class="service-card" onclick="document.getElementById('hisabKhataBox').scrollIntoView({ behavior: 'smooth' })">
+            <div class="service-icon">📒</div>
+            <div class="service-name">হিসাব খাতা</div>
+            <div class="service-desc">দোকান ও খরচের খাতা</div>
+        </div>
+        <div class="service-card" onclick="document.getElementById('prayerBox').scrollIntoView({ behavior: 'smooth' })">
+            <div class="service-icon">🕌</div>
+            <div class="service-name">নামাজের সময়</div>
+            <div class="service-desc">৫ ওয়াক্ত ও অ্যালার্ট</div>
+        </div>
+        <div class="service-card" onclick="document.getElementById('taskBox').scrollIntoView({ behavior: 'smooth' })">
+            <div class="service-icon">📝</div>
+            <div class="service-name">কাজের তালিকা</div>
+            <div class="service-desc">ভয়েস টু-ডু নোট</div>
+        </div>
+        <div class="service-card" onclick="openEmergencyModal()">
+            <div class="service-icon">🚨</div>
+            <div class="service-name">জরুরি হেল্পলাইন</div>
+            <div class="service-desc">৯৯৯, ৩৩৩ ও ১০৯</div>
+        </div>
+    </div>
+
+    <!-- 1. FULL BLOOD DONOR NETWORK PANEL -->
+    <div class="blood-network-container" id="bloodNetworkBox">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 16px;">
+            <div>
+                <h3 class="section-title" style="color: #f87171; margin-bottom: 4px;">🩸 লাইভ রক্তদাতা নেটওয়ার্ক (Live Blood Donor Finder & Registration)</h3>
+                <p style="color: #94a3b8; font-size: 0.85rem;">জরুরি রক্তের প্রয়োজনে সরাসরি রক্তদাতার সাথে যোগাযোগ করুন বা রক্তদাতা হিসেবে নাম লেখান</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <button class="b-tab-btn active" id="btnFindBlood" onclick="switchBloodView('find')">🔍 রক্তদাতা খুঁজুন</button>
+                <button class="b-tab-btn" id="btnRegisterDonor" onclick="switchBloodView('register')">➕ নাম লেখান</button>
+            </div>
+        </div>
+
+        <div id="bloodFindSection">
+            <div class="form-row" style="margin-bottom: 18px;">
+                <select id="filterBloodGroup" class="app-input" onchange="fetchBloodDonors()">
+                    <option value="all">সব গ্রুপের রক্তদাতা (All Groups)</option>
+                    <option value="A+">A+ (A Positive)</option>
+                    <option value="A-">A- (A Negative)</option>
+                    <option value="B+">B+ (B Positive)</option>
+                    <option value="B-">B- (B Negative)</option>
+                    <option value="O+">O+ (O Positive)</option>
+                    <option value="O-">O- (O Negative)</option>
+                    <option value="AB+">AB+ (AB Positive)</option>
+                    <option value="AB-">AB- (AB Negative)</option>
+                </select>
+                <input type="text" id="filterBloodArea" class="app-input" placeholder="এলাকা দিয়ে ফিল্টার করুন (যেমন: বাড্ডা, গুলশান, মিরপুর)..." onkeyup="fetchBloodDonors()">
+            </div>
+            <div class="blood-card-grid" id="donorsGrid">
+                <p style="color: #94a3b8;">রক্তদাতাদের তালিকা লোড হচ্ছে...</p>
+            </div>
+        </div>
+
+        <div id="bloodRegisterSection" style="display: none; background: #0f172a; padding: 20px; border-radius: 10px; border: 1px solid #334155;">
+            <h4 style="color: #f87171; margin-bottom: 12px; font-size: 0.95rem;">রক্তদাতা হিসেবে তথ্য জমা দিন</h4>
+            <div class="form-row">
+                <input type="text" id="donorName" class="app-input" placeholder="আপনার পুরো নাম">
+                <input type="tel" id="donorPhone" class="app-input" placeholder="মোবাইল নম্বর">
+                <select id="donorGroup" class="app-input">
+                    <option value="A+">A+ (A Positive)</option>
+                    <option value="A-">A- (A Negative)</option>
+                    <option value="B+">B+ (B Positive)</option>
+                    <option value="B-">B- (B Negative)</option>
+                    <option value="O+">O+ (O Positive)</option>
+                    <option value="O-">O- (O Negative)</option>
+                    <option value="AB+">AB+ (AB Positive)</option>
+                    <option value="AB-">AB- (AB Negative)</option>
+                </select>
+                <input type="text" id="donorArea" class="app-input" placeholder="আপনার এলাকা (যেমন: উত্তর বাড্ডা, ঢাকা)">
+            </div>
+            <button class="hisab-btn" style="background: #ef4444;" onclick="registerAsDonor()">রক্তদাতা নিবন্ধন সম্পন্ন করুন</button>
+        </div>
+    </div>
+
+    <!-- 2. FULL TRANSPORT PANEL (BUS & TRAIN) -->
+    <div class="transport-container" id="transportBox">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 16px;">
+            <div>
+                <h3 class="section-title" style="color: #818cf8; margin-bottom: 4px;">🚌 লোকাল বাস ও ট্রেন রুট গাইড (Transport Schedule & Routes Full Panel)</h3>
+                <p style="color: #94a3b8; font-size: 0.85rem;">ঢাকার প্রধান লোকাল বাসের রুট ও কমলাপুর থেকে আন্তঃনগর ট্রেনের সময়সূচি</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <button class="t-tab-btn active" id="btnBusTab" onclick="switchTransportTab('bus')">🚌 ঢাকা লোকাল বাস রুট</button>
+                <button class="t-tab-btn" id="btnTrainTab" onclick="switchTransportTab('train')">🚆 আন্তঃনগর ট্রেনের সময়সূচি</button>
+            </div>
+        </div>
+
+        <div id="busSection">
+            <input type="text" id="busSearchInput" class="app-input" placeholder="বাসের নাম বা এলাকা লিখে খুঁজুন (যেমন: রাইদা, বাড্ডা, টঙ্গী, উত্তরা, মিরপুর)..." onkeyup="fetchBusRoutes()" style="margin-bottom: 16px;">
+            <div class="route-grid" id="busGrid">
+                <p style="color: #94a3b8;">বাসের তালিকা লোড হচ্ছে...</p>
+            </div>
+        </div>
+
+        <div id="trainSection" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                <p style="color: #94a3b8; font-size: 0.9rem;">ঢাকা (কমলাপুর) থেকে বিভিন্ন জেলার উদ্দেশ্যে আন্তঃনগর ট্রেনসমূহ</p>
+                <a href="https://eticket.railway.gov.bd/" target="_blank" class="ticket-portal-btn">🎟️ ট্রেনের টিকিট পোর্টাল (অনলাইন)</a>
+            </div>
+            <div class="route-grid" id="trainGrid">
+                <p style="color: #94a3b8;">ট্রেনের সময়সূচি লোড হচ্ছে...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Marketplace Full Panel -->
+    <div class="marketplace-container" id="marketPlaceBox">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 16px;">
+            <div>
+                <h3 class="section-title" style="color: #38bdf8; margin-bottom: 4px;">🛍️ লোকাল মার্কেটপ্লেস (Local Marketplace Full Panel)</h3>
+                <p style="color: #94a3b8; font-size: 0.85rem;">ফার্নিচার, বাইক, ফ্ল্যাট ভাড়া ও সেকেন্ড হ্যান্ড কেনাবেচা</p>
+            </div>
+            <button class="hisab-btn" onclick="toggleMarketForm()" id="btnToggleMarket" style="background: #0284c7;">➕ নতুন বিজ্ঞাপন দিন</button>
+        </div>
+
+        <div id="newMarketForm" style="display: none; background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; margin-bottom: 20px;">
+            <h4 style="color: #38bdf8; margin-bottom: 12px; font-size: 0.95rem;">পণ্য বা ফ্ল্যাট ভাড়ার বিজ্ঞাপন তৈরি করুন</h4>
+            <div class="form-row">
+                <input type="text" id="marketTitle" class="app-input" placeholder="পণ্যের নাম (যেমন: সেগুন কাঠের ডাইনিং টেবিল)">
+                <select id="marketCategory" class="app-input">
+                    <option value="furniture">🛋️ ফার্নিচার (Furniture)</option>
+                    <option value="vehicle">🏍️ বাইক / গাড়ি (Vehicle)</option>
+                    <option value="rent">🏠 বাসা ভাড়া (To-Let)</option>
+                    <option value="electronics">📱 ইলেকট্রনিক্স (Electronics)</option>
+                    <option value="others">📦 অন্যান্য (Others)</option>
+                </select>
+                <input type="text" id="marketPrice" class="app-input" placeholder="দাম (যেমন: ৳ ২৫,০০০)">
+                <input type="text" id="marketLocation" class="app-input" placeholder="এলাকা (যেমন: গুলশান ২, ঢাকা)">
+            </div>
+            <div class="form-row">
+                <input type="text" id="marketImage" class="app-input" placeholder="ছবির ওয়েব লিংক (ঐচ্ছিক)">
+                <input type="tel" id="marketPhone" class="app-input" placeholder="যোগাযোগের মোবাইল নম্বর">
+            </div>
+            <button class="hisab-btn" onclick="submitMarketItem()" style="background: #10b981;">বিজ্ঞাপন পোস্ট করুন</button>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 16px;">
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="m-tab-btn active" onclick="filterMarketCategory('all', this)">সব পণ্য</button>
+                <button class="m-tab-btn" onclick="filterMarketCategory('furniture', this)">🛋️ ফার্নিচার</button>
+                <button class="m-tab-btn" onclick="filterMarketCategory('vehicle', this)">🏍️ বাইক ও গাড়ি</button>
+                <button class="m-tab-btn" onclick="filterMarketCategory('rent', this)">🏠 বাসা ভাড়া</button>
+                <button class="m-tab-btn" onclick="filterMarketCategory('electronics', this)">📱 ইলেকট্রনিক্স</button>
+            </div>
+            <input type="text" id="marketSearchInput" class="app-input" placeholder="মার্কেটে খুঁজুন..." onkeyup="filterMarketSearch()" style="width: 180px; padding: 6px 10px;">
+        </div>
+
+        <div class="items-grid" id="marketItemsList">
+            <p style="color: #94a3b8;">মার্কেটপ্লেস লোড হচ্ছে...</p>
+        </div>
+    </div>
+
+    <!-- Bazar Prices -->
+    <div class="bazar-container" id="bazarBox">
+        <h3 class="section-title" style="color: #f59e0b;">🛒 নিত্যপণ্যের কাঁচা বাজার দর</h3>
+        <div class="bazar-grid" id="bazarGrid"></div>
+    </div>
+
+    <!-- Bills -->
+    <div class="bill-container" id="billAlertBox">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 class="section-title" style="color: #06b6d4; margin-bottom: 0;">💡 স্মার্ট বিল রিমাইন্ডার</h3>
+            <button class="hisab-btn" onclick="toggleBillForm()" style="background: #0891b2;">➕ নতুন বিল</button>
+        </div>
+        <div id="newBillForm" style="display: none; background: #0f172a; padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+            <div class="form-row">
+                <input type="text" id="billTitle" class="app-input" placeholder="বিলের নাম">
+                <input type="number" id="billAmount" class="app-input" placeholder="পরিমাণ (৳)">
+                <input type="date" id="billDueDate" class="app-input">
+                <button class="hisab-btn" onclick="submitBill()">সেভ করুন</button>
+            </div>
+        </div>
+        <div class="bill-grid" id="billsGrid"></div>
+    </div>
+
+    <!-- Dynamic Quiz -->
+    <div class="quiz-container" id="quizBox">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <h3 class="section-title" style="color: #f59e0b; margin-bottom: 0;">🏆 দৈনিক কুইজ</h3>
+            <button class="hisab-btn" onclick="fetchDynamicQuizzes()" style="background: #f59e0b; color: black; padding: 6px 12px;">🎲 নতুন কুইজ</button>
+        </div>
+        <div id="quizzesList"></div>
+    </div>
+
+    <!-- Hisab Khata -->
+    <div class="hisab-container" id="hisabKhataBox">
+        <h3 class="section-title" style="color: #38bdf8;">📒 ডিজিটাল হিসাব খাতা</h3>
+        <div style="background: #0f172a; padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+            <div class="form-row">
+                <input type="text" id="hisabPerson" class="app-input" placeholder="নাম">
+                <input type="text" id="hisabPhone" class="app-input" placeholder="মোবাইল">
+                <select id="hisabType" class="app-input"><option value="due">বাকি</option><option value="received">জমা</option></select>
+                <input type="number" id="hisabAmount" class="app-input" placeholder="টাকা (৳)">
+            </div>
+            <button class="hisab-btn" onclick="submitHisab()">সংরক্ষণ করুন</button>
+        </div>
+        <table style="width: 100%; border-collapse: collapse;"><tbody id="hisabTableBody"></tbody></table>
+    </div>
+
+    <!-- Voice To-Do -->
+    <div class="task-container" id="taskBox">
+        <h3 class="section-title" style="color: #a78bfa;">📝 বাংলা ভয়েস নোট ও টু-ডু</h3>
+        <div class="form-row"><input type="text" id="taskInput" class="app-input" placeholder="কাজের বিবরণ..."><button class="hisab-btn" style="background: #8b5cf6;" onclick="submitTask()">যোগ করুন</button></div>
+        <div id="tasksList"></div>
+    </div>
+
+    <!-- Prayer Times -->
+    <div class="prayer-container" id="prayerBox">
+        <h3 class="section-title" style="color: #10b981;">🕌 নামাজের সময়সূচি</h3>
+        <div class="grid-services" id="prayerGrid"></div>
+    </div>
+
+    <!-- Floating Emergency -->
+    <button class="emergency-floating-btn" onclick="openEmergencyModal()">🚨 জরুরি হেল্পলাইন</button>
+    <div class="emergency-modal-overlay" id="emergencyModal" onclick="closeEmergencyModal(event)">
+        <div class="emergency-modal">
+            <h3 style="color: #ef4444; margin-bottom: 12px;">🚨 জরুরি হেল্পলাইনসমূহ</h3>
+            <p style="margin-bottom: 8px;">জাতীয় জরুরি সেবা: <a href="tel:999" class="call-btn">📞 ৯৯৯</a></p>
+            <p style="margin-bottom: 8px;">সরকারি তথ্য ও সেবা: <a href="tel:333" class="call-btn">📞 ৩৩৩</a></p>
+            <p>নারী ও শিশু নির্যাতন প্রতিরোধ: <a href="tel:109" class="call-btn">📞 ১০৯</a></p>
+        </div>
+    </div>
+
+    <script>
+        // ডিফল্ট পাবলিক ব্যবহারকারী হিসেবে স্বয়ংক্রিয় হ্যান্ডলিং
+        const PUBLIC_USER_PHONE = '+8801689333000';
+
+        // ================= 1. FULL BLOOD DONOR PANEL SCRIPT =================
+        function switchBloodView(view) {
+            document.getElementById('btnFindBlood').classList.toggle('active', view === 'find');
+            document.getElementById('btnRegisterDonor').classList.toggle('active', view === 'register');
+            document.getElementById('bloodFindSection').style.display = (view === 'find') ? 'block' : 'none';
+            document.getElementById('bloodRegisterSection').style.display = (view === 'register') ? 'block' : 'none';
+
+            if (view !== 'register') {
+                fetchBloodDonors();
+            }
+        }
+
+        async function fetchBloodDonors() {
+            const group = document.getElementById('filterBloodGroup').value;
+            const area = document.getElementById('filterBloodArea').value.trim();
+
+            try {
+                const res = await fetch(`http://localhost:5000/api/blood-donors?group=${encodeURIComponent(group)}&area=${encodeURIComponent(area)}`);
+                const data = await res.json();
+                if (data.success) {
+                    const grid = document.getElementById('donorsGrid');
+                    if (!data.donors || data.donors.length === 0) {
+                        grid.innerHTML = '<p style="color: #94a3b8; grid-column: 1/-1;">এই এলাকায় বা গ্রুপের কোনো রক্তদাতা পাওয়া যায়নি।</p>';
+                        return;
+                    }
+
+                    let html = '';
+                    data.donors.forEach(d => {
+                        html += `
+                            <div class="donor-card">
+                                <span class="group-badge">${d.bloodGroup}</span>
+                                <h4 style="color: #f8fafc; font-size: 1.1rem; margin-bottom: 4px;">${d.name}</h4>
+                                <p style="color: #94a3b8; font-size: 0.85rem;">📍 এলাকা: <strong>${d.area}</strong></p>
+                                <p style="color: #10b981; font-size: 0.8rem; margin: 4px 0;">🕒 অবস্থা: ${d.lastDonation}</p>
+                                <a href="tel:${d.phone}" class="blood-call-btn">📞 সরাসরি কল দিন: ${d.phone}</a>
+                            </div>
+                        `;
+                    });
+                    grid.innerHTML = html;
+                }
+            } catch (err) {
+                document.getElementById('donorsGrid').innerHTML = '<p style="color: #ef4444;">রক্তদাতাদের তালিকা লোড করা যায়নি।</p>';
+            }
+        }
+
+        async function registerAsDonor() {
+            const name = document.getElementById('donorName').value.trim();
+            const phone = document.getElementById('donorPhone').value.trim();
+            const bloodGroup = document.getElementById('donorGroup').value;
+            const area = document.getElementById('donorArea').value.trim();
+
+            if (!name || !phone || !area) {
+                alert('অনুগ্রহ করে নাম, মোবাইল নম্বর এবং এলাকা পূরণ করুন!');
+                return;
+            }
+
+            try {
+                const res = await fetch('http://localhost:5000/api/blood-donors', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, phone, bloodGroup, area })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert(data.message);
+                    document.getElementById('donorName').value = '';
+                    document.getElementById('donorPhone').value = '';
+                    document.getElementById('donorArea').value = '';
+                    switchBloodView('find');
+                } else {
+                    alert(data.message || 'নিবন্ধন করা যায়নি।');
+                }
+            } catch (err) { alert('সার্ভার সমস্যা হয়েছে!'); }
+        }
+
+        // ================= 2. FULL TRANSPORT PANEL SCRIPT (BUS & TRAIN) =================
+        function switchTransportTab(tab) {
+            document.getElementById('btnBusTab').classList.toggle('active', tab === 'bus');
+            document.getElementById('btnTrainTab').classList.toggle('active', tab === 'train');
+            document.getElementById('busSection').style.display = (tab === 'bus') ? 'block' : 'none';
+            document.getElementById('trainSection').style.display = (tab === 'train') ? 'block' : 'none';
+
+            if (tab === 'train') fetchTrainSchedule();
+            else fetchBusRoutes();
+        }
+
+        async function fetchBusRoutes() {
+            const search = document.getElementById('busSearchInput').value;
+            try {
+                const res = await fetch(`http://localhost:5000/api/transport/buses?search=${encodeURIComponent(search)}`);
+                const data = await res.json();
+                if (data.success) {
+                    const grid = document.getElementById('busGrid');
+                    if (!data.buses || data.buses.length === 0) {
+                        grid.innerHTML = '<p style="color: #94a3b8; grid-column: 1/-1;">কোনো বাসের রুট পাওয়া যায়নি।</p>';
+                        return;
+                    }
+
+                    let html = '';
+                    data.buses.forEach(b => {
+                        html += `
+                            <div class="route-card">
+                                <span class="route-type-badge">বাস সার্ভিস</span>
+                                <h4 style="color: #f8fafc; font-size: 1.05rem;">${b.name}</h4>
+                                <div style="color: #38bdf8; font-weight: bold; margin: 6px 0;">${b.from} ⇄ ${b.to}</div>
+                                <p style="color: #94a3b8; font-size: 0.82rem; line-height: 1.4;">${b.via}</p>
+                                <p style="color: #10b981; font-weight: bold; font-size: 0.85rem; margin-top: 8px;">ভাড়া: ${b.fare}</p>
+                            </div>
+                        `;
+                    });
+                    grid.innerHTML = html;
+                }
+            } catch (err) {}
+        }
+
+        async function fetchTrainSchedule() {
+            try {
+                const res = await fetch('http://localhost:5000/api/transport/trains');
+                const data = await res.json();
+                if (data.success) {
+                    let html = '';
+                    data.trains.forEach(t => {
+                        html += `
+                            <div class="route-card">
+                                <span class="route-type-badge">${t.type}</span>
+                                <h4 style="color: #f8fafc; font-size: 1.05rem;">${t.name}</h4>
+                                <div style="color: #38bdf8; font-weight: bold; margin: 6px 0;">${t.route}</div>
+                                <p style="color: #e2e8f0; font-size: 0.85rem;">⏰ ছাড়ার সময়: <strong>${t.depTime}</strong></p>
+                                <p style="color: #f87171; font-size: 0.82rem; margin-top: 4px;">🚫 সাপ্তাহিক বন্ধ: ${t.offDay}</p>
+                                <a href="https://eticket.railway.gov.bd/" target="_blank" class="ticket-portal-btn">অনলাইন টিকিট পোর্টাল</a>
+                            </div>
+                        `;
+                    });
+                    document.getElementById('trainGrid').innerHTML = html;
+                }
+            } catch (err) {}
+        }
+
+        // ================= MARKETPLACE FULL SCRIPT =================
+        let allMarketItems = [];
+        let currentMarketCategory = 'all';
+
+        function toggleMarketForm() {
+            const form = document.getElementById('newMarketForm');
+            form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+        }
+
+        async function fetchMarketplace() {
+            try {
+                const res = await fetch('http://localhost:5000/api/marketplace');
+                const data = await res.json();
+                if (data.success) {
+                    allMarketItems = data.items;
+                    renderMarketItems(allMarketItems);
+                }
+            } catch (err) {}
+        }
+
+        function renderMarketItems(items) {
+            const container = document.getElementById('marketItemsList');
+            if (!items || items.length === 0) {
+                container.innerHTML = '<p style="color: #94a3b8; grid-column: 1/-1;">এই ক্যাটাগরিতে কোনো পণ্য নেই।</p>';
+                return;
+            }
+
+            let html = '';
+            items.forEach(item => {
+                const fallbackImg = 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&auto=format&fit=crop&q=60';
+                html += `
+                    <div class="item-card">
+                        <img src="${item.image || fallbackImg}" alt="${item.title}" class="item-img" onerror="this.src='${fallbackImg}'">
+                        <div class="item-body">
+                            <div class="item-price">${item.price}</div>
+                            <div class="item-title">${item.title}</div>
+                            <div style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 12px;">📍 ${item.location} • 👤 ${item.sellerName}</div>
+                            <div style="display: flex; gap: 6px; margin-top: auto;">
+                                <a href="tel:${item.sellerPhone}" class="call-btn" style="flex: 1;">📞 যোগাযোগ: ${item.sellerPhone}</a>
+                                <button onclick="deleteMarketItem('${item.id}')" style="background: #ef4444; color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer;">🗑️</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function filterMarketCategory(cat, btn) {
+            currentMarketCategory = cat;
+            document.querySelectorAll('.m-tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            applyMarketFilters();
+        }
+
+        function filterMarketSearch() { applyMarketFilters(); }
+
+        function applyMarketFilters() {
+            const term = document.getElementById('marketSearchInput').value.toLowerCase().trim();
+            let filtered = allMarketItems;
+            if (currentMarketCategory !== 'all') {
+                filtered = filtered.filter(i => i.category === currentMarketCategory);
+            }
+            if (term) {
+                filtered = filtered.filter(i => i.title.toLowerCase().includes(term) || i.location.toLowerCase().includes(term));
+            }
+            renderMarketItems(filtered);
+        }
+
+        async function submitMarketItem() {
+            const title = document.getElementById('marketTitle').value.trim();
+            const category = document.getElementById('marketCategory').value;
+            const price = document.getElementById('marketPrice').value.trim();
+            const location = document.getElementById('marketLocation').value.trim();
+            let image = document.getElementById('marketImage').value.trim();
+            const sellerPhone = document.getElementById('marketPhone').value.trim();
+
+            if (!title || !price || !location || !sellerPhone) return alert('সবগুলো তথ্য পূরণ করুন!');
+
+            try {
+                const res = await fetch('http://localhost:5000/api/marketplace', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, category, price, location, sellerName: 'কমিউনিটি মেম্বার', sellerPhone, image })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('বিজ্ঞাপন পোস্ট হয়েছে!');
+                    document.getElementById('marketTitle').value = '';
+                    document.getElementById('marketPrice').value = '';
+                    document.getElementById('marketLocation').value = '';
+                    document.getElementById('marketImage').value = '';
+                    document.getElementById('marketPhone').value = '';
+                    toggleMarketForm();
+                    fetchMarketplace();
+                }
+            } catch (err) {}
+        }
+
+        async function deleteMarketItem(id) {
+            if (!confirm('বিজ্ঞাপনটি মুছে ফেলতে চান?')) return;
+            try {
+                await fetch(`http://localhost:5000/api/marketplace/${id}`, { method: 'DELETE' });
+                fetchMarketplace();
+            } catch (err) {}
+        }
+
+        // ================= VOICE SEARCH =================
+        let speechRecognizer = null;
+        let isSpeechListening = false;
+
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+            speechRecognizer = new SpeechClass();
+            speechRecognizer.continuous = false;
+            speechRecognizer.interimResults = false;
+            speechRecognizer.lang = 'bn-BD';
+
+            speechRecognizer.onstart = function () {
+                isSpeechListening = true;
+                const btn = document.getElementById('voiceBtn');
+                btn.classList.add('recording');
+                document.getElementById('voiceText').innerText = 'শুনছি...';
+            };
+
+            speechRecognizer.onresult = function (event) {
+                const text = event.results[0][0].transcript;
+                document.getElementById('searchInput').value = text;
+                executeSearchAction(text);
+            };
+
+            speechRecognizer.onerror = function () { stopSpeechSearch(); };
+            speechRecognizer.onend = function () { stopSpeechSearch(); };
+        }
+
+        function toggleVoiceRecognition() {
+            if (!speechRecognizer) {
+                const typed = prompt('মুখে যা বলতে চান তা বাংলায় লিখুন:');
+                if (typed) {
+                    document.getElementById('searchInput').value = typed;
+                    executeSearchAction(typed);
+                }
+                return;
+            }
+            if (isSpeechListening) speechRecognizer.stop();
+            else speechRecognizer.start();
+        }
+
+        function stopSpeechSearch() {
+            isSpeechListening = false;
+            const btn = document.getElementById('voiceBtn');
+            btn.classList.remove('recording');
+            document.getElementById('voiceText').innerText = 'মুখে বলুন';
+        }
+
+        function handleManualSearch() {
+            executeSearchAction(document.getElementById('searchInput').value);
+        }
+
+        function executeSearchAction(text) {
+            const query = text.toLowerCase();
+            if (query.includes('রক্ত') || query.includes('ব্লাড')) {
+                document.getElementById('bloodNetworkBox').scrollIntoView({ behavior: 'smooth' });
+            } else if (query.includes('বাস') || query.includes('ট্রেন') || query.includes('রুট')) {
+                document.getElementById('transportBox').scrollIntoView({ behavior: 'smooth' });
+            } else if (query.includes('মার্কেট') || query.includes('সোফা') || query.includes('বাইক')) {
+                document.getElementById('marketPlaceBox').scrollIntoView({ behavior: 'smooth' });
+            } else if (query.includes('বাজার') || query.includes('চাল') || query.includes('তেল')) {
+                document.getElementById('bazarBox').scrollIntoView({ behavior: 'smooth' });
+            } else if (query.includes('বিল') || query.includes('বিদ্যুৎ')) {
+                document.getElementById('billAlertBox').scrollIntoView({ behavior: 'smooth' });
+            } else if (query.includes('কুইজ') || query.includes('পয়েন্ট')) {
+                document.getElementById('quizBox').scrollIntoView({ behavior: 'smooth' });
+            } else if (query.includes('হিসাব') || query.includes('বাকি')) {
+                document.getElementById('hisabKhataBox').scrollIntoView({ behavior: 'smooth' });
+            } else if (query.includes('নামাজ')) {
+                document.getElementById('prayerBox').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // ================= BAZAR, BILLS, QUIZ, HISAB, TASKS, WEATHER =================
+        async function fetchBazarPrices() {
+            try {
+                const res = await fetch('http://localhost:5000/api/bazar-prices');
+                const data = await res.json();
+                if (data.success) {
+                    let html = '';
+                    data.prices.forEach(p => {
+                        html += `<div class="bazar-card"><strong>${p.name}</strong><br><small style="color: #94a3b8;">${p.unit}</small><div style="color: #f59e0b; font-weight: bold; margin-top: 6px; font-size: 1.15rem;">${p.price}</div></div>`;
+                    });
+                    document.getElementById('bazarGrid').innerHTML = html;
+                }
+            } catch (err) {}
+        }
+
+        function toggleBillForm() {
+            const f = document.getElementById('newBillForm');
+            f.style.display = (f.style.display === 'none') ? 'block' : 'none';
+        }
+
+        async function fetchBills() {
+            try {
+                const res = await fetch(`http://localhost:5000/api/bills/${PUBLIC_USER_PHONE}`);
+                const data = await res.json();
+                if (data.success) {
+                    let html = '';
+                    data.bills.forEach(b => {
+                        html += `<div class="bill-card"><h4>${b.title}</h4><div style="color: #38bdf8; font-size: 1.2rem; font-weight: bold; margin: 6px 0;">৳ ${b.amount}</div><p style="color: #94a3b8;">তারিখ: ${b.dueDate}</p><button class="hisab-btn" style="background: ${b.status==='paid'?'#334155':'#0284c7'}; margin-top: 8px;" onclick="togglePayBill('${b.id}')">${b.status==='paid'?'✓ পরিশোধিত':'বিল পরিশোধ করুন'}</button></div>`;
+                    });
+                    document.getElementById('billsGrid').innerHTML = html;
+                }
+            } catch (err) {}
+        }
+
+        async function submitBill() {
+            const title = document.getElementById('billTitle').value.trim();
+            const amount = document.getElementById('billAmount').value;
+            const dueDate = document.getElementById('billDueDate').value;
+            if (!title || !amount || !dueDate) return alert('বিলের তথ্য দিন!');
+            await fetch('http://localhost:5000/api/bills', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userPhone: PUBLIC_USER_PHONE, title, amount, dueDate }) });
+            toggleBillForm();
+            fetchBills();
+        }
+
+        async function togglePayBill(id) { 
+            await fetch(`http://localhost:5000/api/bills/${id}/pay`, { method: 'PATCH' }); 
+            fetchBills(); 
+        }
+
+        async function fetchDynamicQuizzes() {
+            try {
+                const res = await fetch('http://localhost:5000/api/quiz/random');
+                const data = await res.json();
+                if (data.success) {
+                    let html = '';
+                    data.quizzes.forEach((q, idx) => {
+                        let opts = '';
+                        q.options.forEach((o, i) => { opts += `<button class="quiz-opt-btn" onclick="submitQuiz('${q.id}', ${i}, this)">${o}</button>`; });
+                        html += `<div class="quiz-card"><div class="quiz-question" style="margin-bottom: 10px; font-weight: bold;">${idx+1}. ${q.question}</div><div class="quiz-options">${opts}</div></div>`;
+                    });
+                    document.getElementById('quizzesList').innerHTML = html;
+                }
+            } catch (err) {}
+        }
+
+        async function submitQuiz(id, opt, btn) {
+            const res = await fetch('http://localhost:5000/api/quiz/submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userPhone: PUBLIC_USER_PHONE, quizId: id, selectedOption: opt }) });
+            const data = await res.json();
+            if (data.isCorrect) { btn.style.background = '#10b981'; alert('সঠিক উত্তর হয়েছে! 🎉'); }
+            else { btn.style.background = '#ef4444'; alert('ভুল উত্তর! সঠিক উত্তর চেষ্টা করুন।'); }
+        }
+
+        async function fetchHisab() {
+            try {
+                const res = await fetch(`http://localhost:5000/api/hisab/${PUBLIC_USER_PHONE}`);
+                const data = await res.json();
+                if (data.success) {
+                    let html = '';
+                    data.records.forEach(r => { html += `<tr><td style="padding: 8px;">${r.personName}</td><td style="color: ${r.type==='due'?'#f87171':'#34d399'}; font-weight: bold;">৳ ${r.amount}</td></tr>`; });
+                    document.getElementById('hisabTableBody').innerHTML = html || '<tr><td>কোনো হিসাব নেই।</td></tr>';
+                }
+            } catch (err) {}
+        }
+
+        async function submitHisab() {
+            const personName = document.getElementById('hisabPerson').value.trim();
+            const personPhone = document.getElementById('hisabPhone').value.trim();
+            const type = document.getElementById('hisabType').value;
+            const amount = document.getElementById('hisabAmount').value;
+            if (!personName || !amount) return alert('নাম ও টাকা দিন!');
+            await fetch('http://localhost:5000/api/hisab', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userPhone: PUBLIC_USER_PHONE, personName, personPhone, type, amount }) });
+            fetchHisab();
+        }
+
+        async function fetchWeather() {
+            try {
+                const res = await fetch('http://localhost:5000/api/weather');
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('wTemp').innerText = data.data.temp;
+                    document.getElementById('wCondition').innerText = `${data.data.condition} • ${data.data.city}`;
+                }
+            } catch (err) {}
+        }
+
+        async function fetchPrayerTimes() {
+            try {
+                const res = await fetch('http://localhost:5000/api/prayer-times');
+                const data = await res.json();
+                if (data.success) {
+                    let html = '';
+                    data.data.schedules.forEach(p => { html += `<div style="background: #0f172a; padding: 10px; border-radius: 6px; text-align: center;"><div>${p.name}</div><strong>${p.display}</strong></div>`; });
+                    document.getElementById('prayerGrid').innerHTML = html;
+                }
+            } catch (err) {}
+        }
+
+        async function fetchTasks() {
+            try {
+                const res = await fetch(`http://localhost:5000/api/tasks/${PUBLIC_USER_PHONE}`);
+                const data = await res.json();
+                if (data.success) {
+                    let html = '';
+                    data.tasks.forEach(t => { html += `<div style="background: #0f172a; padding: 8px 12px; border-radius: 6px; margin-bottom: 6px;">${t.text}</div>`; });
+                    document.getElementById('tasksList').innerHTML = html;
+                }
+            } catch (err) {}
+        }
+
+        async function submitTask() {
+            const text = document.getElementById('taskInput').value.trim();
+            if (!text) return;
+            await fetch('http://localhost:5000/api/tasks', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userPhone: PUBLIC_USER_PHONE, text }) });
+            document.getElementById('taskInput').value = '';
+            fetchTasks();
+        }
+
+        function openEmergencyModal() { document.getElementById('emergencyModal').style.display = 'flex'; }
+        function closeEmergencyModal(e) { if (e.target.id === 'emergencyModal') document.getElementById('emergencyModal').style.display = 'none'; }
+
+        // Initial Load for All Services
+        fetchBloodDonors();
+        fetchBusRoutes();
+        fetchMarketplace();
+        fetchBazarPrices();
+        fetchBills();
+        fetchDynamicQuizzes();
+        fetchHisab();
+        fetchWeather();
+        fetchPrayerTimes();
+        fetchTasks();
+    </script>
+</body>
+</html>
